@@ -39,6 +39,7 @@ import Link from 'next/link'
 
 import MessagingCard from '@/components/MessagingCard'
 import EditBio from '@/components/EditBio'
+import TestComponent from '@/components/TestComponent'
 
 
 
@@ -73,8 +74,8 @@ const page = () => {
               <h2 className="text-2xl font-semibold text-blue">Hello Declan!</h2>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" size="icon" className='hover:bg-[#33265E]' >
-                    <Pencil className='hover:bg-white-5'/>
+                  <Button variant="outline" size="icon" className='hover:bg-[#3a267d] hover:text-white' >
+                    <Pencil />
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="bg-[#FFFF] sm:max-w-[700px]">
@@ -85,9 +86,10 @@ const page = () => {
                     </DialogDescription>
                   </DialogHeader>
                   <EditBio />
-                  <DialogFooter>
+                  {/* <TestComponent /> */}
+                  {/* <DialogFooter>
                     <Button variant="outline" type="submit" className='text-black-6 hover:bg-[#33265E] hover:text-[#FFFF]'>Save changes</Button>
-                  </DialogFooter>
+                  </DialogFooter> */}
                 </DialogContent>
               </Dialog>
             </div>

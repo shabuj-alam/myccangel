@@ -51,15 +51,14 @@ const Searchbar = () => {
             />
           </PopoverTrigger>
           <PopoverContent className='bg-white-1 mr-8 max-h-[400px] overflow-y-scroll scroll-smooth no-scrollbar'>
-            {blogsData.map(({id ,title, description, date})=>(
-              <div
-                key={id}
-              >
+            {blogsData.map(({id, title, description, date})=>(
+              <div>
                 <NotificationCard
                   key={id}
+                  id={id}
                   title={title}
                   description={description}
-                  date={date} id={0}                />
+                  date={date}/>
                 <Separator className="bg-slate-200  my-4" />
               </div>
             ))}

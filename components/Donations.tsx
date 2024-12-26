@@ -1,6 +1,10 @@
 'use client'
 
 import React, { useState, MouseEvent, useEffect } from 'react'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
 
 import {
     Card,
@@ -10,6 +14,16 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,11 +42,36 @@ import DonationPage2 from './DonationPage2'
 import DonationPage3 from './DonationPage3'
 import DonationPage4 from './DonationPage4'
 
+const formSchema = z.object({
+    paymentterms: z.string().min(2, {
+        message: "required",
+    }),
+    paymentamount: z.string().min(2, {
+        message: "required",
+    }),
+})
+
 
 const Donations = () => {
 
     const [clkValue, setClkValue] = useState(0);
     const [tabsName, setTabsName] = useState('donation1');
+
+    // 1. Define your form.
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            paymentterms: "",
+            paymentamount: "",
+        },
+    })
+
+     // 2. Define a submit handler.
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        console.log(values)
+    }
 
     useEffect(() => {
         console.log(clkValue);
@@ -113,35 +152,46 @@ const Donations = () => {
                                     </TabsTrigger>
                                 </TabsList>
 
-                                <TabsContent value="donation1" className='h-80'>
-                                    <Card className='border-none shadow-none h-[100%]'>
-                                        <CardHeader>
+                                <Form {...form}>
+                                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                                        <TabsContent value="donation1" className='h-80'>
+                                            <Card className='border-none shadow-none h-[100%]'>
+                                                <CardHeader>
+                                                </CardHeader>
+                                                <CardContent className="space-y-2">
+                                                    <DonationPage1 formValue={form}/>
+                                                </CardContent>
+                                            </Card>
+                                        </TabsContent>
 
-                                        </CardHeader>
-                                        <CardContent className="space-y-2">
-                                            <DonationPage1 />
-                                        </CardContent>
-                                        {/* <CardFooter className='flex justify-end'>
-                                            <Button onClick={handleNextEvent} className='bg-[#33265E] w-[40%]'>
-                                                <Label className='text-[#FFFF]'>Next</Label>
-                                            </Button>
-                                        </CardFooter> */}
-                                    </Card>
-                                </TabsContent>
+                                        <div className=''>
+                                            <CardFooter className={`flex ${(clkValue != 0) ? 'justify-between' : 'justify-end'}`}>
+                                                {(clkValue == 1) || (clkValue == 2) ?
+                                                    <Button onClick={handleBackEvent} className='w-[40%]' variant="outline">
+                                                        <Label className='text-slate-900'>Back</Label>
+                                                    </Button>
+                                                    :
+                                                    null
+                                                }
+                                                {(clkValue != 3)
+                                                    ?
+                                                    <Button onClick={handleNextEvent} className='bg-[#33265E] w-[40%]'>
+                                                        <Label className='text-[#FFFF]'>Next</Label>
+                                                    </Button>
+                                                    :
+                                                    null
+                                                }
 
-                                <TabsContent value="donation2" className='h-80'>
+                                            </CardFooter>
+                                        </div>
+                                    </form>
+                                </Form>
+
+                                {/* <TabsContent value="donation2" className='h-80'>
                                     <Card className='border-none shadow-none h-[100%]'>
                                         <CardContent className="space-y-2">
                                             <DonationPage2 />
                                         </CardContent>
-                                        {/* <CardFooter className='flex justify-between'>
-                                            <Button onClick={handleBackEvent} className='w-[40%]' variant="outline">
-                                            <Label className='text-slate-900'>Back</Label>
-                                            </Button>
-                                            <Button onClick={handleNextEvent} className='bg-[#33265E] w-[40%]'>
-                                                <Label className='text-[#FFFF]'>Next</Label>
-                                            </Button>
-                                        </CardFooter> */}
                                     </Card>
                                 </TabsContent>
 
@@ -151,14 +201,6 @@ const Donations = () => {
                                         <CardContent className="space-y-2">
                                             <DonationPage3 />
                                         </CardContent>
-                                        {/* <CardFooter className='flex justify-between'>
-                                            <Button onClick={handleBackEvent} className='w-[40%]' variant="outline">
-                                                <Label className='text-slate-900'>Back</Label>
-                                            </Button>
-                                            <Button onClick={handleNextEvent} className='bg-[#33265E] w-[40%]'>
-                                                <Label className='text-[#FFFF]'>Next</Label>
-                                            </Button>
-                                        </CardFooter> */}
                                     </Card>
                                 </TabsContent>
 
@@ -168,13 +210,10 @@ const Donations = () => {
                                         <CardContent className="space-y-2">
                                             <DonationPage4 />
                                         </CardContent>
-                                        {/* <CardFooter className='flex justify-between'>
-
-                                        </CardFooter> */}
                                     </Card>
-                                </TabsContent>
+                                </TabsContent> */}
 
-                                <div className=''>
+                                {/* <div className=''>
                                     <CardFooter className={`flex ${(clkValue!=0)?'justify-between':'justify-end'}`}>
                                         {(clkValue == 1) || (clkValue == 2) ?
                                             <Button onClick={handleBackEvent} className='w-[40%]' variant="outline">
@@ -193,7 +232,8 @@ const Donations = () => {
                                         }
                                         
                                     </CardFooter>
-                                </div>
+                                </div> */}
+
                             </Tabs>
                         </div>
                     </div>
